@@ -1,0 +1,22 @@
+.plain-box {
+    height: 100px;
+    width: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999999999;
+}
+
+.plain-box img {
+    width: 100%;
+    height: auto;
+}
+
+.plain-box.moving-right img {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
