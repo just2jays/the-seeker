@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('body').append('<div id="mainbox" class="plain-box"><div class="sprite cat-soldier"></div></div>');
+    $('body').append('<div id="mainbox" class="plain-box"><div class="sprite cat-soldier" style="background: url('+chrome.extension.getURL('images/sprite_cat-soldier.png')+') 0 0 no-repeat;"></div></div>');
     beginJourney();
 
     $('#mainElement').on('click', '.new-character', newCharacter);
@@ -43,10 +43,11 @@ function beginJourney() {
 function newCharacter(name) {
     $('#mainbox').remove();
     if( name == "soldier" ) {
-        $('body').append('<div id="mainbox" class="plain-box"><div class="sprite cat-soldier"></div></div>');
-        beginJourney();
+        $('body').append('<div id="mainbox" class="plain-box"><div class="sprite cat-soldier" style="background: url('+chrome.extension.getURL('images/sprite_cat-soldier.png')+') 0 0 no-repeat;"></div></div>');
+    }else if( name == "sir-nerdington"  ) {
+        $('body').append('<div id="mainbox" class="plain-box"><div class="sprite sir-nerdington" style="background: url('+chrome.extension.getURL('images/sprite_sir-nerdington.png')+') 0 0 no-repeat;"></div></div>');
     }else{
         $('body').append('<div id="mainbox" class="plain-box"><img src="'+chrome.extension.getURL('images/free_walker.gif')+'" /></div>');
-        beginJourney();
     }
+    beginJourney();
 }
