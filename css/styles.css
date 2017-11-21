@@ -1,3 +1,4 @@
+/* ANIMATED GIF STYLES */
 .plain-box {
     height: 100px;
     width: 100px;
@@ -19,4 +20,27 @@
     transform: scaleX(-1);
     filter: FlipH;
     -ms-filter: "FlipH";
+}
+
+/* SPRITE STYLES */
+.plain-box .sprite {
+    display: inline-block;
+}
+
+.plain-box .sprite.cat-soldier {
+    width: 120px;
+    height: 150px;
+    background: url('https://imgur.com/6Bo4CL7.gif') 0 0 no-repeat;
+    animation: play_cat-soldier 0.8s steps(6) infinite;
+}
+.plain-box.moving-left .sprite.cat-soldier {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+@keyframes play_cat-soldier {
+    100% { background-position: 0 -900px; }
 }
