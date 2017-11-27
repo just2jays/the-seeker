@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    $('body').append('<div id="mainbox" class="plain-box"><div class="sprite cat-soldier" style="background: url('+chrome.extension.getURL('images/sprite_cat-soldier.png')+') 0 0 no-repeat;"></div></div>');
+    $('body').append('<div id="sprite-container"><div class="sprite cat-soldier" style="background: url('+chrome.extension.getURL('images/sprite_cat-soldier.png')+') 0 0 no-repeat;"></div></div>');
     beginJourney();
 
     $('#mainElement').on('click', '.new-character', newCharacter);
@@ -13,13 +13,13 @@ chrome.runtime.onMessage.addListener(
 );
 
 function beginJourney() {
-    var $walker = $('.plain-box');
+    var $walker = $('#sprite-container');
     var lastX = 0;
     var lastY = 0;
 
     $('body').on('mousemove', function(event) {
-        $walker.removeClass('moving-left moving-right')
-        if( event.pageX < $walker.position().left ) {
+        $walker.removeClass('moving-left moving-right stopped')
+        if( event.pageX-($walker.outerWidth()/2) < $walker.position().left ) {
             // moving LEFT
             $walker.addClass('moving-left');
         }else{
@@ -36,18 +36,21 @@ function beginJourney() {
         lastY = event.pageY;
 
         $walker.stop();
-        $walker.animate({ top: event.pageY, left: event.pageX }, 10000);
+        $walker.animate({ top: event.pageY-$walker.outerHeight(), left: event.pageX-($walker.outerWidth()/2) }, 6000, 'swing', function(){
+            $walker.removeClass('moving-left moving-right');
+            $walker.addClass('stopped');
+        });
     });
 }
 
 function newCharacter(name) {
-    $('#mainbox').remove();
+    $('#sprite-container').remove();
     if( name == "soldier" ) {
-        $('body').append('<div id="mainbox" class="plain-box"><div class="sprite cat-soldier" style="background: url('+chrome.extension.getURL('images/sprite_cat-soldier.png')+') 0 0 no-repeat;"></div></div>');
+        $('body').append('<div id="sprite-container"><div class="sprite cat-soldier" style="background: url('+chrome.extension.getURL('images/sprite_cat-soldier.png')+') 0 0 no-repeat;"></div></div>');
     }else if( name == "sir-nerdington"  ) {
-        $('body').append('<div id="mainbox" class="plain-box"><div class="sprite sir-nerdington" style="background: url('+chrome.extension.getURL('images/sprite_sir-nerdington.png')+') 0 0 no-repeat;"></div></div>');
-    }else{
-        $('body').append('<div id="mainbox" class="plain-box"><img src="'+chrome.extension.getURL('images/free_walker.gif')+'" /></div>');
+        $('body').append('<div id="sprite-container"><div class="sprite sir-nerdington" style="background: url('+chrome.extension.getURL('images/sprite_sir-nerdington.png')+') 0 0 no-repeat;"></div></div>');
+    }else if( name == "the-robot"  ) {
+        $('body').append('<div id="sprite-container"><div class="sprite the-robot" style="background: url('+chrome.extension.getURL('images/sprite_the-robot.png')+') 0 0 no-repeat;"></div></div>');
     }
     beginJourney();
 }

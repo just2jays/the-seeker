@@ -1,39 +1,28 @@
-/* ANIMATED GIF STYLES */
-.plain-box {
-    height: 100px;
-    width: 100px;
+#sprite-container {
+    display: block;
+    overflow: hidden;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 999999999;
 }
 
-.plain-box img {
-    width: 100%;
-    height: auto;
-}
-
-.plain-box.moving-right img {
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
-    -ms-filter: "FlipH";
-}
-
 /* SPRITE STYLES */
-.plain-box .sprite {
+#sprite-container .sprite {
     display: inline-block;
 }
 
+#sprite-container.stopped .sprite{
+    animation: none !important;
+}
+
 /*  -- Cat Solider */
-.plain-box .sprite.cat-soldier {
+#sprite-container .sprite.cat-soldier {
     width: 120px;
     height: 150px;
     animation: play_cat-soldier 0.8s steps(6) infinite;
 }
-.plain-box.moving-left .sprite.cat-soldier {
+#sprite-container.moving-left .sprite.cat-soldier {
     -moz-transform: scaleX(-1);
     -o-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
@@ -45,13 +34,13 @@
     100% { background-position: 0 -900px; }
 }
 
-/*  -- Nerdington */
-.plain-box .sprite.sir-nerdington {
+/*  -- Sir Nerdington */
+#sprite-container .sprite.sir-nerdington {
     width: 80px;
     height: 80px;
     animation: play_sir-nerdington 0.8s steps(6) infinite;
 }
-.plain-box.moving-left .sprite.sir-nerdington {
+#sprite-container.moving-left .sprite.sir-nerdington {
     -moz-transform: scaleX(-1);
     -o-transform: scaleX(-1);
     -webkit-transform: scaleX(-1);
@@ -61,4 +50,22 @@
 }
 @keyframes play_sir-nerdington {
     100% { background-position: 0 -480px; }
+}
+
+/*  -- The Robot */
+#sprite-container .sprite.the-robot {
+    width: 142px;
+    height: 80px;
+    animation: play_the-robot 0.8s steps(20) infinite;
+}
+#sprite-container.moving-right .sprite.the-robot {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+@keyframes play_the-robot {
+    100% { background-position: 0 -1600px; }
 }
