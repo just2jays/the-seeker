@@ -1,56 +1,118 @@
-$(document).ready(function() {
-    $('body').append('<div id="sprite-container"><div class="sprite cat-soldier" style="background: url('+chrome.extension.getURL('images/sprite_cat-soldier.png')+') 0 0 no-repeat;"></div></div>');
-    beginJourney();
+class Character {
+    constructor(name) {
+        this.name = name;
+        this.health = 100;
+        this.template = '<div id="sprite-container"><div class="sprite '+name+'" style="background: url('+chrome.extension.getURL('images/sprite_'+name+'.png')+') 0 0 no-repeat;"></div></div>';
+        this.movementTimer = undefined;
 
-    $('#mainElement').on('click', '.new-character', newCharacter);
-});
-
-chrome.runtime.onMessage.addListener(
-    function(request, sender, sendResponse) {
-        //console.log(request);
-        newCharacter(request.name);
+        $('body').append(this.template);
     }
-);
 
-function beginJourney() {
-    var $walker = $('#sprite-container');
-    var lastX = 0;
-    var lastY = 0;
+    initiateMovement() {
+        $('body').off('mousemove');
+        clearTimeout(currentCharacter.movementTimer);
 
-    $('body').on('mousemove', function(event) {
-        $walker.removeClass('moving-left moving-right stopped')
-        if( event.pageX-($walker.outerWidth()/2) < $walker.position().left ) {
+        // generate a random Bool for choosing b/w 2 options
+        //  - this will have to change once more are added obvs
+        var decidedPath = Math.random() >= 0.5;
+
+        if(decidedPath) {
+            currentCharacter.followRandomPoint();
+        }else{
+            currentCharacter.followUserMouse();
+        }
+        currentCharacter.movementTimer = setTimeout(currentCharacter.initiateMovement, 8000);
+    }
+
+    followRandomPoint() {
+        var $walker = $('#sprite-container');
+        var randomX = Math.random() * (window.outerWidth - 1) + 1;
+        var randomY = Math.random() * (window.outerHeight - 1) + 1;
+        var lastX = 0;
+        var lastY = 0;
+
+        $walker.removeClass('moving-up moving-down moving-left moving-right stopped')
+        
+        if( randomX-($walker.outerWidth()/2) < $walker.position().left ) {
             // moving LEFT
             $walker.addClass('moving-left');
         }else{
             // moving RIGHT
             $walker.addClass('moving-right');
         }
-        lastX = event.pageX;
+        lastX = randomX;
 
-        if( event.pageY < lastY ) {
+        if( randomY < lastY ) {
             // moving UP
+            $walker.addClass('moving-up');
         }else{
             // moving DOWN
+            $walker.addClass('moving-down');
         }
-        lastY = event.pageY;
+        lastY = randomY;
 
         $walker.stop();
-        $walker.animate({ top: event.pageY-$walker.outerHeight(), left: event.pageX-($walker.outerWidth()/2) }, 6000, 'swing', function(){
-            $walker.removeClass('moving-left moving-right');
+        $walker.animate({ top: randomY-$walker.outerHeight(), left: randomX-($walker.outerWidth()/2) }, 6000, 'swing', function(){
+            $walker.removeClass('moving-up moving-down moving-left moving-right');
             $walker.addClass('stopped');
+            this.followRandomPoint();
+        }.bind(this));
+    }
+
+    followUserMouse() {
+        var $walker = $('#sprite-container');
+        var lastX = 0;
+        var lastY = 0;
+    
+        $('body').on('mousemove', function(event) {
+            // Remove all previous classes
+            $walker.removeClass('moving-up moving-down moving-left moving-right stopped');
+            
+            if( event.pageX-($walker.outerWidth()/2) < $walker.position().left ) {
+                // moving LEFT
+                $walker.addClass('moving-left');
+            }else{
+                // moving RIGHT
+                $walker.addClass('moving-right');
+            }
+            lastX = event.pageX;
+    
+            if( event.pageY < lastY ) {
+                // moving UP
+                $walker.addClass('moving-up');
+            }else{
+                // moving DOWN
+                $walker.addClass('moving-down');
+            }
+            lastY = event.pageY;
+    
+            $walker.stop();
+            $walker.animate({ top: event.pageY-$walker.outerHeight(), left: event.pageX-($walker.outerWidth()/2) }, 6000, 'swing', function(){
+                $walker.removeClass('moving-left moving-right');
+                $walker.addClass('stopped');
+            });
         });
-    });
+    }
+
+    // Remove the character from page entirely
+    kill() {
+        $('#sprite-container').remove();
+    }
 }
 
-function newCharacter(name) {
-    $('#sprite-container').remove();
-    if( name == "soldier" ) {
-        $('body').append('<div id="sprite-container"><div class="sprite cat-soldier" style="background: url('+chrome.extension.getURL('images/sprite_cat-soldier.png')+') 0 0 no-repeat;"></div></div>');
-    }else if( name == "sir-nerdington"  ) {
-        $('body').append('<div id="sprite-container"><div class="sprite sir-nerdington" style="background: url('+chrome.extension.getURL('images/sprite_sir-nerdington.png')+') 0 0 no-repeat;"></div></div>');
-    }else if( name == "the-robot"  ) {
-        $('body').append('<div id="sprite-container"><div class="sprite the-robot" style="background: url('+chrome.extension.getURL('images/sprite_the-robot.png')+') 0 0 no-repeat;"></div></div>');
+// Create Default Character
+var currentCharacter = new Character("cat-soldier");
+
+// Start the initial journey
+$(document).ready(function() {
+    currentCharacter.initiateMovement();
+});
+
+// Listen for Character change request
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        currentCharacter.kill();
+        currentCharacter = new Character(request.name);
+        currentCharacter.initiateMovement();
     }
-    beginJourney();
-}
+);

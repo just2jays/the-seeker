@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if(tabs.length == 0){ 
                 console.log("could not send mesage to current tab");
             }else{
-                chrome.tabs.sendMessage(tabs[0].id, {name: "soldier"}, function(response) {
+                chrome.tabs.sendMessage(tabs[0].id, {name: "cat-soldier"}, function(response) {
                     // console.log(response);
                 });
             }
