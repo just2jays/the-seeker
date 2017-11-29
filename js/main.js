@@ -101,7 +101,7 @@ class Character {
 }
 
 // Create Default Character
-var currentCharacter = new Character("cat-soldier");
+var currentCharacter = new Character("sir-nerdington");
 
 // Start the initial journey
 $(document).ready(function() {
