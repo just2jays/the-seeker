@@ -69,3 +69,21 @@
 @keyframes play_the-robot {
     100% { background-position: 0 -1600px; }
 }
+
+/*  -- Puppy */
+#sprite-container .sprite.puppy {
+    width: 130px;
+    height: 130px;
+    animation: play_puppy 0.8s steps(8) infinite;
+}
+#sprite-container.moving-left .sprite.puppy {
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
+@keyframes play_puppy {
+    100% { background-position: 0 -1040px; }
+}
