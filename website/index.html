@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Seeker - Cute Virtual Pet & Desktop Buddy</title>
+    <link rel="icon" type="image/png" href="seeker_64px.png">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --bg-card: rgba(20, 28, 47, 0.7);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            --accent-glow: rgba(99, 102, 241, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* Background grid overlay */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        .glow-orb {
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            top: -10vw;
+            right: -10vw;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(80px);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+            -webkit-text-fill-color: initial;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h2 {
+            font-size: clamp(36px, 6vw, 60px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero h2 span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: clamp(16px, 2.5vw, 20px);
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 36px auto;
+        }
+
+        .btn-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--accent-gradient);
+            color: #fff;
+            padding: 16px 36px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            box-shadow: 0 10px 30px var(--accent-glow);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-download svg {
+            fill: currentColor;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* --- MEET THE BUDDIES --- */
+        .showcase {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: clamp(28px, 4vw, 36px);
+            font-weight: 800;
+            margin-bottom: 40px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .sprite-container {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.25);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        /* Sprite assets (displays first frame, animates on card hover) */
+        .sprite {
+            display: inline-block;
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            image-rendering: pixelated;
+        }
+
+        .sprite.cat-soldier {
+            width: 120px;
+            height: 150px;
+            background-image: url('images/sprite_cat-soldier.png');
+        }
+        .card:hover .sprite.cat-soldier {
+            animation: play_cat-soldier 0.8s steps(6) infinite;
+        }
+        @keyframes play_cat-soldier { 100% { background-position: 0 -900px; } }
+
+        .sprite.sir-nerdington {
+            width: 80px;
+            height: 80px;
+            background-image: url('images/sprite_sir-nerdington.png');
+        }
+        .card:hover .sprite.sir-nerdington {
+            animation: play_sir-nerdington 0.8s steps(6) infinite;
+        }
+        @keyframes play_sir-nerdington { 100% { background-position: 0 -480px; } }
+
+        .sprite.the-robot {
+            width: 142px;
+            height: 80px;
+            background-image: url('images/sprite_the-robot.png');
+        }
+        .card:hover .sprite.the-robot {
+            animation: play_the-robot 0.8s steps(20) infinite;
+        }
+        @keyframes play_the-robot { 100% { background-position: 0 -1600px; } }
+
+        .sprite.puppy {
+            width: 130px;
+            height: 130px;
+            background-image: url('images/sprite_puppy.png');
+        }
+        .card:hover .sprite.puppy {
+            animation: play_puppy 0.8s steps(8) infinite;
+        }
+        @keyframes play_puppy { 100% { background-position: 0 -1040px; } }
+
+        .card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .card .role {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* --- FEATURES SECTION --- */
+        .features {
+            padding: 80px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 16px;
+        }
+
+        .feature-icon {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--accent);
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .feature-item h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-item p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 48px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        footer nav {
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        footer nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        footer nav a:hover {
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-bg"></div>
+    <div class="glow-orb"></div>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <a href="#" class="logo">
+                <img src="seeker_64px.png" alt="The Seeker Logo">
+                The Seeker
+            </a>
+        </header>
+
+        <!-- HERO -->
+        <section class="hero">
+            <h2>Adopt a <span>Cute Virtual Pet</span> &<br>Desktop Buddy in Your Browser</h2>
+            <p>Bring pixel-art companions to life as you browse the web. They wander, track your cursor, react to scroll events, and chat with you in real-time!</p>
+            <a href="https://chrome.google.com/webstore/detail/YOUR-EXTENSION-ID" class="btn-download" target="_blank">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                </svg>
+                Add to Chrome
+            </a>
+        </section>
+
+        <!-- COMPANIONS SHOWCASE -->
+        <section class="showcase">
+            <h2 class="section-title">Meet the Companions</h2>
+            <div class="grid">
+                <!-- Cat Soldier -->
+                <div class="card">
+                    <div class="sprite-container">
+                        <div class="sprite cat-soldier"></div>
+                    </div>
+                    <h3>Cat Soldier</h3>
+                    <div class="role">Tactical Guard</div>
+                    <p>A disciplined, sword-wielding feline reporting for security sweep duty on your active tab margins.</p>
+                </div>
+
+                <!-- Sir Nerdington -->
+                <div class="card">
+                    <div class="sprite-container">
+                        <div class="sprite sir-nerdington"></div>
+                    </div>
+                    <h3>Nerdington</h3>
+                    <div class="role">Code Advisor</div>
+                    <p>A smart pixel scholar who inspects the page code structure and chimes in with nerdy observations.</p>
+                </div>
+
+                <!-- The Robot -->
+                <div class="card">
+                    <div class="sprite-container">
+                        <div class="sprite the-robot"></div>
+                    </div>
+                    <h3>The Robot</h3>
+                    <div class="role">System Droid</div>
+                    <p>A calculation machine checking DOM complexity, page load latencies, and loading motivation modules.</p>
+                </div>
+
+                <!-- Puppy -->
+                <div class="card">
+                    <div class="sprite-container">
+                        <div class="sprite puppy"></div>
+                    </div>
+                    <h3>Puppy</h3>
+                    <div class="role">Wiggle Boy</div>
+                    <p>A happy puppy who wags his tail, sniffs around links, and loves chasing your cursor across the page.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <section class="features">
+            <h2 class="section-title">Why Adopt a Seeker?</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🎮</div>
+                    <div>
+                        <h4>Wander & Follow Modes</h4>
+                        <p>Toggle between "Wander" mode to let them roam freely or "Mouse" mode to make them track your cursor in real time.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">📐</div>
+                    <div>
+                        <h4>Custom Size & Speed</h4>
+                        <p>Make them tiny or giant, and adjust their walking speeds to match your browsing comfort using the popup sliders.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">💬</div>
+                    <div>
+                        <h4>Interactive Speech</h4>
+                        <p>Click them directly on the screen to pet them or wake them, triggering funny character-specific comments.</p>
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <div>
+                        <h4>100% Privacy Focused</h4>
+                        <p>No networks, no tracking, and no ads. Runs entirely in your browser memory and collects absolutely zero data.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <nav>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="https://github.com/just2jays/the-seeker" target="_blank">Source Code</a>
+            </nav>
+            <p>&copy; 2026 The Seeker. Made for fun and companions.</p>
+        </footer>
+    </div>
+</body>
+</html>
