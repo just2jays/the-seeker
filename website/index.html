@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Seeker - Cute Virtual Pet & Desktop Buddy</title>
     <link rel="icon" type="image/png" href="seeker_64px.png">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             --bg-dark: #090d16;
@@ -40,8 +41,11 @@
         /* Background grid overlay */
         .grid-bg {
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-image: 
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
                 linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
             background-size: 40px 40px;
@@ -186,7 +190,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(0,0,0,0.25);
+            background: rgba(0, 0, 0, 0.25);
             border-radius: 12px;
             margin-bottom: 20px;
             overflow: hidden;
@@ -204,42 +208,66 @@
         .sprite.cat-soldier {
             width: 120px;
             height: 150px;
-            background-image: url('images/sprite_cat-soldier.png');
+            background-image: url('../images/sprite_cat-soldier.png');
         }
+
         .card:hover .sprite.cat-soldier {
             animation: play_cat-soldier 0.8s steps(6) infinite;
         }
-        @keyframes play_cat-soldier { 100% { background-position: 0 -900px; } }
+
+        @keyframes play_cat-soldier {
+            100% {
+                background-position: 0 -900px;
+            }
+        }
 
         .sprite.sir-nerdington {
             width: 80px;
             height: 80px;
-            background-image: url('images/sprite_sir-nerdington.png');
+            background-image: url('../images/sprite_sir-nerdington.png');
         }
+
         .card:hover .sprite.sir-nerdington {
             animation: play_sir-nerdington 0.8s steps(6) infinite;
         }
-        @keyframes play_sir-nerdington { 100% { background-position: 0 -480px; } }
+
+        @keyframes play_sir-nerdington {
+            100% {
+                background-position: 0 -480px;
+            }
+        }
 
         .sprite.the-robot {
             width: 142px;
             height: 80px;
-            background-image: url('images/sprite_the-robot.png');
+            background-image: url('../images/sprite_the-robot.png');
         }
+
         .card:hover .sprite.the-robot {
             animation: play_the-robot 0.8s steps(20) infinite;
         }
-        @keyframes play_the-robot { 100% { background-position: 0 -1600px; } }
+
+        @keyframes play_the-robot {
+            100% {
+                background-position: 0 -1600px;
+            }
+        }
 
         .sprite.puppy {
             width: 130px;
             height: 130px;
-            background-image: url('images/sprite_puppy.png');
+            background-image: url('../images/sprite_puppy.png');
         }
+
         .card:hover .sprite.puppy {
             animation: play_puppy 0.8s steps(8) infinite;
         }
-        @keyframes play_puppy { 100% { background-position: 0 -1040px; } }
+
+        @keyframes play_puppy {
+            100% {
+                background-position: 0 -1040px;
+            }
+        }
 
         .card h3 {
             font-size: 20px;
@@ -331,6 +359,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="grid-bg"></div>
     <div class="glow-orb"></div>
@@ -339,7 +368,7 @@
         <!-- HEADER -->
         <header>
             <a href="#" class="logo">
-                <img src="seeker_64px.png" alt="The Seeker Logo">
+                <img src="../icons/seeker_64px.png" alt="The Seeker Logo">
                 The Seeker
             </a>
         </header>
@@ -347,10 +376,12 @@
         <!-- HERO -->
         <section class="hero">
             <h2>Adopt a <span>Cute Virtual Pet</span> &<br>Desktop Buddy in Your Browser</h2>
-            <p>Bring pixel-art companions to life as you browse the web. They wander, track your cursor, react to scroll events, and chat with you in real-time!</p>
+            <p>Bring pixel-art companions to life as you browse the web. They wander, track your cursor, react to scroll
+                events, and chat with you in real-time!</p>
             <a href="https://chrome.google.com/webstore/detail/YOUR-EXTENSION-ID" class="btn-download" target="_blank">
                 <svg viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    <path
+                        d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
                 </svg>
                 Add to Chrome
             </a>
@@ -367,7 +398,8 @@
                     </div>
                     <h3>Cat Soldier</h3>
                     <div class="role">Tactical Guard</div>
-                    <p>A disciplined, sword-wielding feline reporting for security sweep duty on your active tab margins.</p>
+                    <p>A disciplined, sword-wielding feline reporting for security sweep duty on your active tab
+                        margins.</p>
                 </div>
 
                 <!-- Sir Nerdington -->
@@ -377,7 +409,8 @@
                     </div>
                     <h3>Nerdington</h3>
                     <div class="role">Code Advisor</div>
-                    <p>A smart pixel scholar who inspects the page code structure and chimes in with nerdy observations.</p>
+                    <p>A smart pixel scholar who inspects the page code structure and chimes in with nerdy observations.
+                    </p>
                 </div>
 
                 <!-- The Robot -->
@@ -387,7 +420,8 @@
                     </div>
                     <h3>The Robot</h3>
                     <div class="role">System Droid</div>
-                    <p>A calculation machine checking DOM complexity, page load latencies, and loading motivation modules.</p>
+                    <p>A calculation machine checking DOM complexity, page load latencies, and loading motivation
+                        modules.</p>
                 </div>
 
                 <!-- Puppy -->
@@ -397,7 +431,8 @@
                     </div>
                     <h3>Puppy</h3>
                     <div class="role">Wiggle Boy</div>
-                    <p>A happy puppy who wags his tail, sniffs around links, and loves chasing your cursor across the page.</p>
+                    <p>A happy puppy who wags his tail, sniffs around links, and loves chasing your cursor across the
+                        page.</p>
                 </div>
             </div>
         </section>
@@ -410,7 +445,8 @@
                     <div class="feature-icon">🎮</div>
                     <div>
                         <h4>Wander & Follow Modes</h4>
-                        <p>Toggle between "Wander" mode to let them roam freely or "Mouse" mode to make them track your cursor in real time.</p>
+                        <p>Toggle between "Wander" mode to let them roam freely or "Mouse" mode to make them track your
+                            cursor in real time.</p>
                     </div>
                 </div>
 
@@ -418,7 +454,8 @@
                     <div class="feature-icon">📐</div>
                     <div>
                         <h4>Custom Size & Speed</h4>
-                        <p>Make them tiny or giant, and adjust their walking speeds to match your browsing comfort using the popup sliders.</p>
+                        <p>Make them tiny or giant, and adjust their walking speeds to match your browsing comfort using
+                            the popup sliders.</p>
                     </div>
                 </div>
 
@@ -426,7 +463,8 @@
                     <div class="feature-icon">💬</div>
                     <div>
                         <h4>Interactive Speech</h4>
-                        <p>Click them directly on the screen to pet them or wake them, triggering funny character-specific comments.</p>
+                        <p>Click them directly on the screen to pet them or wake them, triggering funny
+                            character-specific comments.</p>
                     </div>
                 </div>
 
@@ -434,7 +472,8 @@
                     <div class="feature-icon">🔒</div>
                     <div>
                         <h4>100% Privacy Focused</h4>
-                        <p>No networks, no tracking, and no ads. Runs entirely in your browser memory and collects absolutely zero data.</p>
+                        <p>No networks, no tracking, and no ads. Runs entirely in your browser memory and collects
+                            absolutely zero data.</p>
                     </div>
                 </div>
             </div>
@@ -450,4 +489,5 @@
         </footer>
     </div>
 </body>
+
 </html>
