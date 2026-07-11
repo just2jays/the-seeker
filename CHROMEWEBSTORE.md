@@ -5,28 +5,36 @@
 ## Store Listing
 
 **Extension Name**  
-The Seeker
+The Seeker - Cute Virtual Pet & Desktop Buddy
 
 **Short Description**  
-Little companion friends right in your browser! Custom animated characters that wander around or follow your cursor.
+Adopt a cute virtual pet or desktop buddy! Choose an animated companion to wander your pages, follow your cursor, and chat.
 
 **Detailed Description**  
-Add a little companion to your browser! The Seeker brings custom, animated pixel-art characters directly onto your web pages. Watch them stroll around your tabs, react to your scroll, and respond to your clicks.
+ADOPT A CUTE VIRTUAL PET FOR YOUR BROWSER!
 
-Choose from four distinct characters:
-- Cat Soldier: A tactical feline dedicated to scanning your tabs.
-- Sir Nerdington: A nerdy developer advisor who comments on web standards.
-- The Robot: A calculated iron companion computing browsing percentages.
-- Puppy: An energetic tail-wagging puppy who loves chasing your mouse.
+The Seeker brings custom, animated pixel-art desktop buddies directly onto your web pages. Watch your companion stroll around your tabs, react to page scrolls, and talk in real-time when you click them. 
 
-Customize your companion's behavior through a beautiful settings popup:
-- Size Scale: Adjust their size to be tiny, normal, or large.
+MEET YOUR NEW DESKTOP BUDDIES:
+- Cat Soldier: A tactical pixel feline dedicated to guarding your active tab.
+- Sir Nerdington: A nerdy developer advisor who comments on web standards and coding.
+- The Robot: A calculated iron companion computing browsing statistics.
+- Puppy: An energetic tail-wagging puppy who loves chasing your mouse cursor.
+
+CUSTOMIZE YOUR COMPANION:
+- Companion Size: Drag the slider to scale them from tiny to extra large (0.5x to 1.5x).
 - Walking Speed: Choose how fast they stroll across pages.
 - Wander Mode: Set them to wander randomly or track and follow your cursor in real-time.
-- Speech Bubbles: Toggle whether they chime in with funny, character-specific quotes.
-- Go to Sleep: Easily hide the companion temporarily without disabling the extension.
+- Interactive Speech: Toggle whether they chime in with funny, character-specific quotes.
+- Go to Sleep: Hide your companion temporarily with a single click.
 
-The Seeker is lightweight, safe, and operates entirely locally on your device.
+KEY FEATURES:
+- 100% Free & No Ads
+- Offline Compatibility: Runs entirely locally on your machine.
+- Privacy First: No user tracking, data collection, or external network requests.
+- Lightweight: Built on clean, modern code that won't slow down your tabs.
+
+Perfect for fans of shimeji pets, desktop pals, retro pixel art, and digital companions. Adopt your new browser buddy today!
 
 **Category**  
 Fun

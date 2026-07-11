@@ -1,8 +1,8 @@
 {
-  "name": "The Seeker",
+  "name": "The Seeker - Cute Virtual Pet & Desktop Buddy",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "Little friends right in your browser!",
+  "description": "Adopt a cute virtual pet or desktop buddy! Choose an animated companion to wander your pages, follow your cursor, and chat.",
   "homepage_url": "http://worldisending.com",
   "icons": {
     "16": "icons/seeker_16px.png",
