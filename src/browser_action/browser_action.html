@@ -1,27 +1,407 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<style type="text/css">
-			#main-container {
-				padding: 10px;
-				height: 200px;
-				width: 400px;
-				font-family: Helvetica, Arial, sans-serif;
-			}
-			h1 {
-				font-size: 2em;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="main-container">
-			<h1>Welcome to The Seeker!</h1>
-			<p>Here you have an array of characters to choose from. Each one will follow you as you browse the web. Enjoy their presence...make sure they have a good time man!</p>
-			<button type="button" id="CharacterButtonA" class="new-character">Cool Cat Soldier</button>
-			<button type="button" id="CharacterButtonB" class="new-character">Sir Nerdington</button>
-			<button type="button" id="CharacterButtonC" class="new-character">The Robot</button>
-			<button type="button" id="CharacterButtonD" class="new-character">Puppy</button>
-		</div>
-		<script src="browser_action.js"></script>
-	</body>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-border-active: #6366f1;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+        }
+
+        body {
+            width: 380px;
+            margin: 0;
+            padding: 16px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-size: 14px;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .version {
+            font-size: 11px;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.06);
+            padding: 2px 6px;
+            border-radius: 20px;
+        }
+
+        .description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin: 0 0 16px 0;
+            line-height: 1.4;
+        }
+
+        /* --- CHARACTER GRID --- */
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .character-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .character-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(30, 41, 59, 0.9);
+            box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.3);
+        }
+
+        .character-card.active {
+            border-color: var(--card-border-active);
+            background: rgba(99, 102, 241, 0.08);
+            box-shadow: 0 0 14px var(--accent-glow), inset 0 0 0 1px var(--accent);
+        }
+
+        .character-preview {
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            pointer-events: none;
+        }
+
+        /* Scaled down preview sprites inside cards */
+        .character-preview .sprite {
+            transform-origin: center center;
+        }
+        .character-preview .sprite.cat-soldier {
+            transform: scale(0.42);
+        }
+        .character-preview .sprite.sir-nerdington {
+            transform: scale(0.68);
+        }
+        .character-preview .sprite.the-robot {
+            transform: scale(0.48);
+        }
+        .character-preview .sprite.puppy {
+            transform: scale(0.48);
+        }
+
+        .character-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .character-role {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        /* --- SETTINGS PANEL --- */
+        .settings-panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .setting-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-label-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .setting-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .setting-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        /* Sliders */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 140px;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .slider-val {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-primary);
+            width: 26px;
+            text-align: right;
+        }
+
+        /* Toggle Switches */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 22px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider-switch {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 34px;
+        }
+
+        .slider-switch:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50%;
+        }
+
+        input:checked + .slider-switch {
+            background-color: var(--accent);
+        }
+
+        input:checked + .slider-switch:before {
+            transform: translateX(18px);
+        }
+
+        /* --- CONTROL ACTIONS --- */
+        .control-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn.active-sleep {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+
+        .btn.active-sleep:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>The Seeker</h1>
+        <span class="version">v1.0.0</span>
+    </header>
+
+    <p class="description">Select a little companion to follow you as you explore the web. Customize their size, speed, and behavior below!</p>
+
+    <!-- Character Grid -->
+    <div class="character-grid">
+        <div class="character-card" data-character="cat-soldier">
+            <div class="character-preview">
+                <div class="sprite cat-soldier"></div>
+            </div>
+            <div class="character-name">Cat Soldier</div>
+            <div class="character-role">Tactical Feline</div>
+        </div>
+
+        <div class="character-card" data-character="sir-nerdington">
+            <div class="character-preview">
+                <div class="sprite sir-nerdington"></div>
+            </div>
+            <div class="character-name">Nerdington</div>
+            <div class="character-role">Code Advisor</div>
+        </div>
+
+        <div class="character-card" data-character="the-robot">
+            <div class="character-preview">
+                <div class="sprite the-robot"></div>
+            </div>
+            <div class="character-name">The Robot</div>
+            <div class="character-role">Iron Companion</div>
+        </div>
+
+        <div class="character-card" data-character="puppy">
+            <div class="character-preview">
+                <div class="sprite puppy"></div>
+            </div>
+            <div class="character-name">Puppy</div>
+            <div class="character-role">Very Good Boy</div>
+        </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="settings-panel">
+        <!-- Wander Mode Toggle -->
+        <div class="setting-row">
+            <div class="setting-label-group">
+                <div class="setting-title">Wander Mode</div>
+                <div class="setting-desc">Wander randomly vs follow mouse</div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="wanderModeToggle">
+                <span class="slider-switch"></span>
+            </label>
+        </div>
+
+        <!-- Speech Toggle -->
+        <div class="setting-row">
+            <div class="setting-label-group">
+                <div class="setting-title">Speech Bubbles</div>
+                <div class="setting-desc">Let them talk occasionally</div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="speechToggle" checked>
+                <span class="slider-switch"></span>
+            </label>
+        </div>
+
+        <!-- Scale Slider -->
+        <div class="setting-row">
+            <div class="setting-label-group">
+                <div class="setting-title">Companion Size</div>
+                <div class="setting-desc">Adjust width and height</div>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="scaleSlider" class="slider" min="0.5" max="1.5" step="0.1" value="1.0">
+                <span class="slider-val" id="scaleVal">1.0x</span>
+            </div>
+        </div>
+
+        <!-- Speed Slider -->
+        <div class="setting-row">
+            <div class="setting-label-group">
+                <div class="setting-title">Walking Speed</div>
+                <div class="setting-desc">How fast they move</div>
+            </div>
+            <div class="slider-container">
+                <input type="range" id="speedSlider" class="slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                <span class="slider-val" id="speedVal">1.0x</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="control-actions">
+        <button class="btn" id="sleepBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10 10 10 0 0 0 10-10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"></path><path d="M12 6v6l4 2"></path></svg>
+            <span>Send to Sleep</span>
+        </button>
+    </div>
+
+    <script src="browser_action.js"></script>
+</body>
 </html>

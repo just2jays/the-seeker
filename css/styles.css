@@ -1,89 +1,122 @@
 #sprite-container {
     display: block;
-    overflow: hidden;
-    position: absolute;
+    overflow: visible;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 999999999;
+    width: var(--width, 80px);
+    height: var(--height, 80px);
+    z-index: 2147483647; /* Maximum possible z-index to stay on top of all websites */
+    pointer-events: none;
+    transform: translate3d(var(--x, 0px), var(--y, 0px), 0) scale(var(--scale, 1));
+    transform-origin: bottom center;
+    transition: transform 0.1s ease-out;
 }
 
 /* SPRITE STYLES */
 #sprite-container .sprite {
     display: inline-block;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    transform: scaleX(var(--dir, 1));
+    transform-origin: center center;
+    pointer-events: auto;
+    cursor: pointer;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+    transition: filter 0.2s ease;
 }
 
-#sprite-container.stopped .sprite{
-    animation: none !important;
+#sprite-container .sprite:hover {
+    filter: drop-shadow(0 6px 10px rgba(99, 102, 241, 0.4)) brightness(1.05);
 }
 
-/*  -- Cat Solider */
-#sprite-container .sprite.cat-soldier {
+#sprite-container.stopped .sprite {
+    animation-play-state: paused !important;
+}
+
+/*  -- Cat Soldier */
+.sprite.cat-soldier {
     width: 120px;
     height: 150px;
+    background-image: var(--bg-img, url('../images/sprite_cat-soldier.png'));
     animation: play_cat-soldier 0.8s steps(6) infinite;
-}
-#sprite-container.moving-left .sprite.cat-soldier {
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
-    -ms-filter: "FlipH";
 }
 @keyframes play_cat-soldier {
     100% { background-position: 0 -900px; }
 }
 
 /*  -- Sir Nerdington */
-#sprite-container .sprite.sir-nerdington {
+.sprite.sir-nerdington {
     width: 80px;
     height: 80px;
+    background-image: var(--bg-img, url('../images/sprite_sir-nerdington.png'));
     animation: play_sir-nerdington 0.8s steps(6) infinite;
-}
-#sprite-container.moving-left .sprite.sir-nerdington {
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
-    -ms-filter: "FlipH";
 }
 @keyframes play_sir-nerdington {
     100% { background-position: 0 -480px; }
 }
 
 /*  -- The Robot */
-#sprite-container .sprite.the-robot {
+.sprite.the-robot {
     width: 142px;
     height: 80px;
+    background-image: var(--bg-img, url('../images/sprite_the-robot.png'));
     animation: play_the-robot 0.8s steps(20) infinite;
-}
-#sprite-container.moving-right .sprite.the-robot {
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
-    -ms-filter: "FlipH";
 }
 @keyframes play_the-robot {
     100% { background-position: 0 -1600px; }
 }
 
 /*  -- Puppy */
-#sprite-container .sprite.puppy {
+.sprite.puppy {
     width: 130px;
     height: 130px;
+    background-image: var(--bg-img, url('../images/sprite_puppy.png'));
     animation: play_puppy 0.8s steps(8) infinite;
-}
-#sprite-container.moving-left .sprite.puppy {
-    -moz-transform: scaleX(-1);
-    -o-transform: scaleX(-1);
-    -webkit-transform: scaleX(-1);
-    transform: scaleX(-1);
-    filter: FlipH;
-    -ms-filter: "FlipH";
 }
 @keyframes play_puppy {
     100% { background-position: 0 -1040px; }
+}
+
+/* --- SPEECH BUBBLE STYLES --- */
+.seeker-speech-bubble {
+    position: absolute;
+    bottom: 105%; /* Place bubble directly above character */
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(15, 23, 42, 0.95);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    color: #f8fafc;
+    padding: 8px 14px;
+    border-radius: 12px;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    z-index: 2147483647;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    width: max-content;
+    max-width: 220px;
+    white-space: normal;
+}
+
+.seeker-speech-bubble.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Speech Bubble Arrow */
+.seeker-speech-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
 }

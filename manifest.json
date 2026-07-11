@@ -1,7 +1,7 @@
 {
   "name": "The Seeker",
-  "version": "0.0.4",
-  "manifest_version": 2,
+  "version": "1.0.0",
+  "manifest_version": 3,
   "description": "Little friends right in your browser!",
   "homepage_url": "http://worldisending.com",
   "icons": {
@@ -10,26 +10,30 @@
     "128": "icons/seeker_128px.png"
   },
   "default_locale": "en",
-  "background": {
-    "page": "src/background/background.html",
-    "persistent": true
-  },
-  "browser_action": {
+  "action": {
     "default_icon": "icons/seeker_64px.png",
-    "default_title": "The Call Him The Seeker",
+    "default_title": "The Seeker",
     "default_popup": "src/browser_action/browser_action.html"
   },
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["js/jquery.min.js", "js/main.js"],
+      "js": ["js/main.js"],
       "css": ["css/styles.css"]
     }
   ],
+  "permissions": [
+    "storage"
+  ],
   "web_accessible_resources": [
-    "images/sprite_cat-soldier.png",
-    "images/sprite_sir-nerdington.png",
-    "images/sprite_the-robot.png",
-    "images/sprite_puppy.png"
+    {
+      "resources": [
+        "images/sprite_cat-soldier.png",
+        "images/sprite_sir-nerdington.png",
+        "images/sprite_the-robot.png",
+        "images/sprite_puppy.png"
+      ],
+      "matches": ["<all_urls>"]
+    }
   ]
 }
