@@ -1,6 +1,6 @@
 # To Package for Chrome Web Store
 
-Run the following command to package your extension for the Chrome Web Store:
+Run the following command to package your extension for the Chrome Web Store (from the root of this repo):
 
 ```bash
 zip -r ../the-seeker.zip . -x "*.git*" "*CHROMEWEBSTORE.md*" "*walkthrough.md*" "*store_assets*" "*PRIVACY.md*" "*website*"
